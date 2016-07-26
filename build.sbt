@@ -21,3 +21,11 @@ lazy val json = (project in file("json"))
 lazy val nashorn = (project in file("nashorn"))
   .dependsOn(core)
   .settings(commonSettings: _*)
+  
+lazy val json = (project in file("json"))
+  .dependsOn(core)
+  .settings(commonSettings: _*)
+
+lazy val nashorn = (project in file("nashorn"))
+  .dependsOn(core)
+  .settings(commonSettings: _*)
