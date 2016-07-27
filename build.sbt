@@ -1,4 +1,5 @@
 
+//--- common settings across all projects -------------------------------------
 lazy val commonSettings = Seq(
   organization := "me.hawkweisman",
   version := "0.0.1",
@@ -6,6 +7,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= testLibraries
 )
 
+//--- settings for the VersionEye plugin --------------------------------------
 lazy val versionEyeSettings = Seq(
   existingProjectId in versioneye := "5798c24f74848d0044b814ca",
   baseUrl in versioneye := "https://www.versioneye.com",
@@ -13,7 +15,9 @@ lazy val versionEyeSettings = Seq(
   publishCrossVersion in versioneye := true
 )
 
+//--- versions of various dependencies ----------------------------------------
 lazy val version_ScalaTest = "2.2.6"
+lazy val version_Json = "20160212"
 
 lazy val testLibraries = Seq(
   "org.scalatest" %% "scalatest" % version_ScalaTest % "test"
@@ -29,6 +33,9 @@ lazy val json = (project in file("json"))
   .dependsOn(core)
   .settings(commonSettings: _*)
   .settings(versionEyeSettings: _*)
+  .settings(
+    // add the org.json library as a dependency for the JSON project
+    libraryDependencies += "org.json" % "json" % version_Json)
 
 lazy val nashorn = (project in file("nashorn"))
   .enablePlugins(VersionEyePlugin)
