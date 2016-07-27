@@ -34,7 +34,7 @@ trait Resolvable {
     */
   @inline final def as[T: JsValue#Element : ClassTag]: Try[T]
     = rawTry flatMap {
-      case it  if classTag[T] == classTag[JsObject] =>
+      case it if classTag[T] == classTag[JsObject] =>
         Resolvable.jsonObjectToIonesco(it)
       case it: T => Success(it)
         // TODO: this exception needs to have a new type
@@ -53,17 +53,44 @@ trait Resolvable {
 }
 
 object Resolvable {
+  /**
+    * An attempt to load the `JSONObject` class from `org.json`.
+    */
   private[this] lazy val jsonObjectClass: Try[Class[_]]
   = Try(Class.forName("org.json.JSONObject"))
-
+  /**
+    * An attempt to load the `IonescoJSONObject` class from `ionesco.json`.
+    */
   private[this] lazy val ionescoJsonObjectClass: Try[Class[_]]
   = Try(Class.forName("me.hawkweisman.ionesco.json.IonescoJsonObject"))
 
+  /**
+    * Convert an `org.json` `JSONObject` into an `IonescoJsonObject`.
+    *
+    * This is Extremely Unsafe because it violates type safety a bit, as we
+    * have to take in a parameter of type `Any` (since we don't always have
+    * `JSONObject` on the classpath, and we might not always know what that is).
+    * The returned object is of type LOL WHATEVER so you don't have to cast it
+    * at the call site, because if we're already violating type safety, may
+    * as well go the whole way, I guess...
+    *
+    * @note that this will return an exception of `org.json` and `me
+    * .hawkweisman.ionesco.json` aren't on the classpath, but you knew that.
+    * @param obj the object to convert to an `IonescoJsonObject`. If this isn't
+    *            of type `JSONObject`, you're gonna have an Extremely Bad Time.
+    * @tparam B LOL WHATEVER
+    * @return the wrapped `IonescoJSONObject`, or an exception if you've been
+    *         naughty.
+    */
   private def jsonObjectToIonesco[B](obj: Any): Try[B]
     = for {
+        // try to access the JSONObject class, or fail if it wasn't loaded
         jsonObj <- jsonObjectClass
+        // try to access the class of IonescoJsonObject or fail
         ionescoObj <- ionescoJsonObjectClass
-        ionescoObjConstructor <- Try(ionescoObj.getConstructor(jsonObj))
-        newObj <- Try(ionescoObjConstructor.newInstance(obj.asInstanceOf[Object]))
+        // try to get the constructor for an IonescoJsonObject from a JSONObject
+        ionescoObjCtor <- Try(ionescoObj.getConstructor(jsonObj))
+        // try to use the constructor to construct an IonescoJsonObject
+        newObj <- Try(ionescoObjCtor.newInstance(obj.asInstanceOf[Object]))
       } yield newObj.asInstanceOf[B]
 }
