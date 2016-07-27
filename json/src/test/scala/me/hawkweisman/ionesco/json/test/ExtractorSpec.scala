@@ -47,7 +47,7 @@ extends WordSpec
   }
 
   "The JsDouble extractor" when {
-    "used with a query for a double" should {
+    "used with a simple JSON field access for a double" should {
       "match the double  in a pattern match" in {
         simpleJs.double should matchPattern { case JsDouble(_) => }
       }
@@ -56,7 +56,7 @@ extends WordSpec
         it shouldEqual 0.5
       }
     }
-    "used with queries for other types" should {
+    "used with field accesses for other types" should {
       "not match a bool" in {
         simpleJs.bool should not matchPattern { case JsDouble(_) => }
       }
@@ -70,7 +70,7 @@ extends WordSpec
   }
 
   "The JsBool extractor" when {
-    "used with a query for a bool" should {
+    "used with a simple JSON field access for a bool" should {
       "match the bool in a pattern match" in {
         simpleJs.bool should matchPattern { case JsBool(_) => }
       }
@@ -79,7 +79,7 @@ extends WordSpec
         it shouldEqual true
       }
     }
-    "used with queries for other types" should {
+    "used with field accesses for other types" should {
       "not match a double" in {
         simpleJs.double should not matchPattern { case JsBool(_) => }
       }
@@ -94,7 +94,7 @@ extends WordSpec
 
 
   "The JsString extractor" when {
-    "used with a query for a bool" should {
+    "used with a simple JSON field access for a bool" should {
       "match the bool in a pattern match" in {
         simpleJs.string should matchPattern { case JsString(_) => }
       }
@@ -103,7 +103,7 @@ extends WordSpec
         it shouldEqual "a string"
       }
     }
-    "used with queries for other types" should {
+    "used with field accesses for other types" should {
       "not match a double" in {
         simpleJs.double should not matchPattern { case JsString(_) => }
       }
