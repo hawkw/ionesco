@@ -4,6 +4,7 @@ package json
 import org.json.JSONObject
 
 import scala.collection.JavaConverters._
+import scala.reflect.ClassTag
 import scala.util.{Success, Try}
 
 /**
@@ -29,10 +30,10 @@ extends JsObject {
     *
     * @param name the name of the field to access
     */
-  override def rawField(name: String): Try[Any]
+  override def rawField(name: String): Try[AnyRef]
   = Try(obj get name)
 
-  override def rawFieldOption(name: String): Option[Any]
+  override def rawFieldOption(name: String): Option[AnyRef]
   = Option(obj opt name)
 
   /**
@@ -43,9 +44,9 @@ extends JsObject {
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  override protected[this] def rawOption: Option[Any] = Some(obj)
+  override protected[this] def rawOption: Option[JSONObject] = Some(obj)
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
-  override protected[this] def rawTry: Try[Any] = Success(obj)
+  override protected[this] def rawTry: Try[JSONObject] = Success(obj)
 }

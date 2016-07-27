@@ -1,6 +1,7 @@
 package me.hawkweisman.ionesco
 
 import scala.language.dynamics
+import scala.reflect.ClassTag
 import scala.util.Try
 
 /** Trait for JavaScript objects with fields that can be selected.
@@ -28,12 +29,12 @@ extends Dynamic
     /**
       * @return the raw untyped ([[Any]]) optional value of this object
       */
-    @inline override protected[this] def rawOption: Option[Any]
+    @inline override protected[this] def rawOption: Option[AnyRef]
       = parent.asOption[JsObject] flatMap { _ rawFieldOption name }
 
     /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
       */
-    @inline override protected[this] def rawTry: Try[Any]
+    @inline override protected[this] def rawTry: Try[AnyRef]
       = parent.as[JsObject] flatMap { _ rawField name }
 
     /**
@@ -41,21 +42,23 @@ extends Dynamic
       *
       * @param name the name of the field to access
       */
-    @inline override protected def rawField(name: String): Try[Any]
-    = for { obj <- this.as[JsObject] }
-      yield { obj rawField name }
+    @inline override protected def rawField(name: String): Try[AnyRef]
+    = for { obj <- this.as[JsObject]
+            raw <- obj rawField name }
+      yield raw
 
-    @inline override protected def rawFieldOption(name: String): Option[Any]
-      = for { obj <- this.asOption[JsObject] }
-        yield { obj rawFieldOption name }
+    @inline override protected def rawFieldOption(name: String): Option[AnyRef]
+      = for { obj <- this.asOption[JsObject]
+              raw <- obj rawFieldOption name }
+        yield raw
   }
 
   /**
     * Access a given field from this object
     * @param name the name of the field to access
     */
-  protected def rawField(name: String): Try[Any]
-  protected def rawFieldOption(name: String): Option[Any]
+  protected def rawField(name: String): Try[AnyRef]
+  protected def rawFieldOption(name: String): Option[AnyRef]
 
   @inline def contains(name: String): Boolean = names contains name
 
