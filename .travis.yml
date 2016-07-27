@@ -30,18 +30,19 @@ cache:
 
 script:
   ### Script to build Ionesco #################################################
-  - sbt compile               # compile
-  - sbt clean coverage test   # run tests
+  - sbt all/compile                     # compile
+  - sbt clean coverage
+  - sbt all/test # run tests
     # remove SBT lockfile and Ivy properties so they don't get cached
   - find $HOME/.sbt -name "*.lock" | xargs rm
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
 after_success:
   ### Report test coverage ####################################################
-  - sbt coverageReport     # generate Cobertura coverage report
+#  - sbt coverageReport     # generate Cobertura coverage report
   - sbt coverageAggregate  # aggregate coverage reports from subprojects
   - sbt codacyCoverage     # report coverage to Codacy
   - bash <(curl -s https://codecov.io/bash) # upload coverage to Codecov.io
   ### Check dependencies and licenses on VersionEye ###########################
-  - sbt versioneye:updateProject
-  - sbt versioneye:licenseCheck
+  - sbt all/versioneye:updateProject
+  - sbt all/versioneye:licenseCheck

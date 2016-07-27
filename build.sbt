@@ -23,6 +23,8 @@ lazy val testLibraries = Seq(
   "org.scalatest" %% "scalatest" % version_ScalaTest % "test"
 )
 
+lazy val all = project.aggregate(core, json, nashorn)
+
 lazy val core = (project in file("."))
   .enablePlugins(VersionEyePlugin)
   .settings(commonSettings: _*)
