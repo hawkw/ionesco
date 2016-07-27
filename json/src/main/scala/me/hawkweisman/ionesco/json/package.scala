@@ -10,7 +10,7 @@ import scala.language.implicitConversions
   */
 package object json {
 
-  implicit def jsonObject2Ionesco(obj: JSONObject): IonescoJsonObject
+  implicit def wrapJsonObject(obj: JSONObject): IonescoJsonObject
     = new IonescoJsonObject(obj)
 
 }
