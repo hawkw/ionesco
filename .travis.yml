@@ -40,3 +40,4 @@ after_success:
   - sbt coverageReport     # generate Cobertura coverage report
   - sbt coverageAggregate  # aggregate coverage reports from subprojects
   - sbt codacyCoverage     # report coverage to Codacy
+  - bash <(curl -s https://codecov.io/bash) # upload coverage to Codecov.io
