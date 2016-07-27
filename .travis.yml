@@ -39,9 +39,9 @@ script:
 
 after_success:
   ### Report test coverage ####################################################
-#  - sbt coverageReport     # generate Cobertura coverage report
-  - sbt coverageAggregate  # aggregate coverage reports from subprojects
-  - sbt codacyCoverage     # report coverage to Codacy
+  - sbt all/coverageReport     # generate Cobertura coverage report
+  - sbt all/coverageAggregate  # aggregate coverage reports from subprojects
+  - sbt all/codacyCoverage     # report coverage to Codacy
   - bash <(curl -s https://codecov.io/bash) # upload coverage to Codecov.io
   ### Check dependencies and licenses on VersionEye ###########################
   - sbt all/versioneye:updateProject
