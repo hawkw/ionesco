@@ -3,13 +3,13 @@ language: scala
 sbt_args:
   # this tells SBT to use whatever Scala version Travis has selected
   - ++$TRAVIS_SCALA_VERSION -J-XX:ReservedCodeCacheSize=256M
-  # we can only build against the Oracle JDK, because we need the latest Nashorn
-  jdk: oraclejdk8
-  # Use JDK 8u45+ explicitly
-  addons:
-    apt:
-      packages:
-        - oracle-java8-installer
+# we can only build against the Oracle JDK, because we need the latest Nashorn
+jdk: oraclejdk8
+# Use JDK 8u45+ explicitly
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
 scala:
   ### Build against the following Scala versions: #############################
   - 2.12.0-M5 # latest milestone release of upcoming Scala major version
@@ -28,13 +28,6 @@ matrix:
     ### Builds against non-current Scala versions are allowed to fail #########
     - scala: 2.12.0-M5
     - scala: 2.10.6
-# we can only build against the Oracle JDK, because we need the latest Nashorn
-jdk: oraclejdk8
-# Use JDK 8u45+ explicitly
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 
 cache:
   directories:
