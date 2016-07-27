@@ -18,11 +18,11 @@ trait Resolvable {
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  protected[this] def rawOption: Option[Any]
+  protected[this] def rawOption: Option[AnyRef]
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
-  protected[this] def rawTry: Try[Any]
+  protected[this] def rawTry: Try[AnyRef]
 
   /**
     * Attempt to resolve this JS object as a `T`.
@@ -35,7 +35,7 @@ trait Resolvable {
   @inline final def as[T: JsValue#Element : ClassTag]: Try[T]
     = rawTry flatMap {
       case it if classTag[T] == classTag[JsObject] =>
-        Resolvable.jsonObjectToIonesco(it)
+        Resolvable jsObjFor it
       case it: T => Success(it)
         // TODO: this exception needs to have a new type
       case it => Failure(new Exception(
@@ -45,7 +45,7 @@ trait Resolvable {
   @inline final def asOption[T: JsValue#Element : ClassTag]: Option[T]
     = rawOption flatMap {
       case it if classTag[T] == classTag[JsObject] =>
-        Resolvable.jsonObjectToIonesco(it) toOption
+        Resolvable jsObjFor it toOption
       case it: T => Some(it)
       case _ => None
     }
@@ -56,13 +56,39 @@ object Resolvable {
   /**
     * An attempt to load the `JSONObject` class from `org.json`.
     */
-  private[this] lazy val jsonObjectClass: Try[Class[_]]
-  = Try(Class.forName("org.json.JSONObject"))
+  private[this] lazy val jsonObjectClass: Option[Class[_]]
+    = Try(Class.forName("org.json.JSONObject")) toOption
+
+  private[this] lazy val nashornObjectClass: Option[Class[_]]
+    = Try(Class.forName("jdk.nashorn.api.scripting.ScriptObjectMirror"))
+          .toOption
+
   /**
     * An attempt to load the `IonescoJSONObject` class from `ionesco.json`.
     */
   private[this] lazy val ionescoJsonObjectClass: Try[Class[_]]
-  = Try(Class.forName("me.hawkweisman.ionesco.json.IonescoJsonObject"))
+    = Try(Class.forName("me.hawkweisman.ionesco.json.IonescoJsonObject"))
+
+  /**
+    * An attempt to load the `IonescoNashornObject` class from `ionesco
+    * .nashorn`.
+    */
+  private[this] lazy val ionescoNashornObjectClass: Try[Class[_]]
+    = Try(Class.forName("me.hawkweisman.ionesco.nashorn.IonescoNashornObject"))
+
+  /**
+    * Returns the Ionesco class for an object of the given `Class`
+    * @param obj the object to find a class for
+    * @return
+    */
+  @inline private[this] def ionescoClassFor(obj: AnyRef): Try[Class[_]]
+    = obj.getClass match {
+        case c if jsonObjectClass contains c => ionescoJsonObjectClass
+        case c if nashornObjectClass contains c => ionescoNashornObjectClass
+        case c =>
+          Failure(new Exception(
+            s"Couldn't find an Ionesco class for ${c.getCanonicalName}."))
+      }
 
   /**
     * Convert an `org.json` `JSONObject` into an `IonescoJsonObject`.
@@ -82,15 +108,14 @@ object Resolvable {
     * @return the wrapped `IonescoJSONObject`, or an exception if you've been
     *         naughty.
     */
-  private def jsonObjectToIonesco[B](obj: Any): Try[B]
+  private def jsObjFor[B](obj: AnyRef): Try[B]
     = for {
-        // try to access the JSONObject class, or fail if it wasn't loaded
-        jsonObj <- jsonObjectClass
-        // try to access the class of IonescoJsonObject or fail
-        ionescoObj <- ionescoJsonObjectClass
-        // try to get the constructor for an IonescoJsonObject from a JSONObject
-        ionescoObjCtor <- Try(ionescoObj.getConstructor(jsonObj))
-        // try to use the constructor to construct an IonescoJsonObject
+        // try to get the corresponding Ionesco class or fail
+        ionescoClass <- ionescoClassFor(obj)
+        // try to get the constructor for the Ioensco class
+        ionescoObjCtor <- Try(ionescoClass.getConstructor(obj.getClass))
+        // try to use the constructor to construct an IonescoJsObject
         newObj <- Try(ionescoObjCtor.newInstance(obj.asInstanceOf[Object]))
       } yield newObj.asInstanceOf[B]
+
 }
