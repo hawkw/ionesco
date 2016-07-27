@@ -26,6 +26,4 @@ extends UnboxedUnion {
   type JsValue
     = ∅ ∨ JsObject ∨ JsArray ∨ JsEnum[_] ∨ Boolean ∨ Double ∨ Int ∨
         String ∨ BigDecimal ∨ BigInt
-
-  type JsAny = JsValue#Element
 }

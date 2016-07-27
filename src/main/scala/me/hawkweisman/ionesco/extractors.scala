@@ -8,7 +8,7 @@ import scala.reflect.ClassTag
   */
 object extractors {
 
-  sealed abstract class JsExtractor[T: JsAny : ClassTag] {
+  sealed abstract class JsExtractor[T: JsValue#Element : ClassTag] {
     @inline def unapply(query: Resolvable): Option[T]
     = query.asOption[T]
   }
