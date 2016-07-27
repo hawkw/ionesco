@@ -10,8 +10,9 @@ scala:
   - 2.10.6    # latest maintainance release of previous Scala major version
 env:
   global:
-    # this tells ScalaTest not to use certain ANSI escapes
-    - TERM=dumb
+    - TERM=dumb # this tells ScalaTest not to use certain ANSI escapes
+    ### API keys for various services: ########################################
+    - secure: "YuNk044kHaTT23R5ZNZxyWvS0jLBorcANahDPVw3FTd4CjcBAqm70xDCjSahTwywxoCSkF1mCQszNSqeGTAvsAHqn4CVpUxQBG7IdSRlWJx9Y2HECoPpNNIvBOSrqXlToEDFeHJdSasaLSVoTqz1CzYmXeU4glgFGqIkODbCqWifD0TKHZyiEQ9IlXiVyv52Geb4JTX0RNoTYWnQQh2INPiUSRz9SxRS6tzkfXLHTDM8MIaBVinno0wfkwEsNPPH3Wv1RelzuC2IkmWcba+Ntc51NtB/34TsaYMEFx9pTVwjQ8JSAioUkuHTmRnHy3V9C5ZlqhmVzDCGxqX3p1gc/9fMKHu3RlAAeQo+vKa18Kfcs8ugVtWLcRLKy8uAGvxGPWFbv9PPm1QUnW+uhPwI32DW1ZoeStRxzCUm4TKg/yHHPxQDqNuyhy9Lc7j/61DJqwAVb8cj70dzSi1RUJXlOmGKHci5E+7iKi4Tsghyx7nOVzJdLfwn2xXICl/PixMW+aMAWjbMSUnBOpdgGRYYT6AXQsVaDatHnk+WS78XEaAnXsk/AvGOpc8DB4uEbEx7uhZnK5kG0jYmO/y+fhvyXMfZlodgbbgZl9Yy2Y2XsRep7RVj7mXkcIkX0WJa/Q/bvSrQ2UJKxsA844zJylQytT1Tn6UwO9uknsR/bW9hcYM="
 
 matrix:
   fast_finish: true
@@ -35,8 +36,7 @@ script:
   - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 
 after_success:
-  ### If the build was successful #############################################
-  # upload test coverage to Codacy
-  - sbt coverageReport
-  - sbt coverageAggregate
-  - sbt codacyCoverage
+  ### Report test coverage ###################################################
+  - sbt coverageReport     # generate Cobertura coverage report
+  - sbt coverageAggregate  # aggregate coverage reports from subprojects
+  - sbt codacyCoverage     # report coverage to Codacy
