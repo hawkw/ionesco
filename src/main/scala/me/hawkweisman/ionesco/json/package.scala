@@ -12,7 +12,7 @@ import scala.util.{Success, Try}
 package object json {
 
   implicit class IonescoJsonObject(val obj: JSONObject)
-  extends JsObject {
+    extends JsObject {
 
     /**
       * Set a field in this object equal to the given value.
@@ -23,7 +23,7 @@ package object json {
       * @param value the value to set the field to
       */
     override protected[this] def setField(name: String, value: Any): Unit
-      = ???
+    = ???
 
     /**
       * Adds a field in this object with the given `name` and `value`.
@@ -39,10 +39,10 @@ package object json {
       * @param name the name of the field to access
       */
     override def rawField(name: String): Try[Any]
-      = Try(obj get name)
+    = Try(obj get name)
 
     override def rawFieldOption(name: String): Option[Any]
-      = Option(obj opt name)
+    = Option(obj opt name)
 
     /**
       * @return the names of the fields in this object

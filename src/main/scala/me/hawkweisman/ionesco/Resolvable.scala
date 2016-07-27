@@ -1,6 +1,9 @@
 package me.hawkweisman.ionesco
 
-import scala.reflect.ClassTag
+import json._
+import org.json.JSONObject
+
+import scala.reflect.{classTag, ClassTag}
 import scala.util.{Failure, Success, Try}
 
 /** A JavaScript value of unknown type which may or may not exist, which we can
@@ -33,6 +36,8 @@ trait Resolvable {
     */
   @inline final def as[T: JsValue#Element : ClassTag]: Try[T]
     = rawTry flatMap {
+      case it: JSONObject if classTag[T] == classTag[JsObject] =>
+        Success(IonescoJsonObject(it).asInstanceOf[T])
       case it: T => Success(it)
         // TODO: this exception needs to have a new type
       case it => Failure(new Exception(
@@ -41,6 +46,8 @@ trait Resolvable {
 
   @inline final def asOption[T: JsValue#Element : ClassTag]: Option[T]
     = rawOption flatMap {
+      case it: JSONObject if classTag[T] == classTag[JsObject] =>
+        Some(IonescoJsonObject(it).asInstanceOf[T])
       case it: T => Some(it)
       case _ => None
     }

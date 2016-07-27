@@ -4,7 +4,8 @@ lazy val commonSettings = Seq(
   organization := "me.hawkweisman",
   version := "0.0.1",
   scalaVersion := "2.11.8",
-  libraryDependencies ++= testLibraries
+  libraryDependencies ++= testLibraries,
+  libraryDependencies += "org.json" % "json" % version_Json
 )
 
 //--- settings for the VersionEye plugin --------------------------------------
@@ -33,9 +34,6 @@ lazy val json = (project in file("json"))
   .dependsOn(core)
   .settings(commonSettings: _*)
   .settings(versionEyeSettings: _*)
-  .settings(
-    // add the org.json library as a dependency for the JSON project
-    libraryDependencies += "org.json" % "json" % version_Json)
 
 lazy val nashorn = (project in file("nashorn"))
   .enablePlugins(VersionEyePlugin)
