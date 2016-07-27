@@ -28,14 +28,6 @@ extends Selectable {
     */
   protected[this] def setField(name: String, value: Any): Unit
 
-  /**
-    * Adds a field in this object with the given `name` and `value`.
-    *
-    * @param name   the name for the new field
-    * @param value  the value for the new field
-    */
-  protected[this] def addField(name: String, value: Any): Unit
-
   @inline def updateDynamic(name: String)(value: Any): Unit
     = setField(name, value)
 
