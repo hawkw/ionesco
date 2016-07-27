@@ -1,0 +1,42 @@
+sudo: false
+language: scala
+sbt_args:
+  # this tells SBT to use whatever Scala version Travis has selected
+  - ++$TRAVIS_SCALA_VERSION -J-XX:ReservedCodeCacheSize=256M
+scala:
+  ### Build against the following Scala versions: #############################
+  - 2.12.0-M5 # latest milestone release of upcoming Scala major version
+  - 2.11.8    # current Scala version
+  - 2.10.6    # latest maintainance release of previous Scala major version
+env:
+  global:
+    # this tells ScalaTest not to use certain ANSI escapes
+    - TERM=dumb
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    ### Builds against non-current Scala versions are allowed to fail #########
+    - scala: 2.12.0-M5
+    - scala: 2.10.6
+
+cache:
+  directories:
+    # save the Ivy cache so we don't need to re-download dependencies as often
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt/boot/
+
+script:
+  ### Script to build Ionesco #################################################
+  - sbt compile               # compile
+  - sbt clean coverage test   # run tests
+    # remove SBT lockfile and Ivy properties so they don't get cached
+  - find $HOME/.sbt -name "*.lock" | xargs rm
+  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+
+after_success:
+  ### If the build was successful #############################################
+  # upload test coverage to Codacy
+  - sbt coverageReport
+  - sbt coverageAggregate
+  - sbt codacyCoverage
