@@ -23,7 +23,7 @@ package object json {
       * @param value the value to set the field to
       */
     override protected[this] def setField(name: String, value: Any): Unit
-      =
+      = ???
 
     /**
       * Adds a field in this object with the given `name` and `value`.
@@ -38,8 +38,11 @@ package object json {
       *
       * @param name the name of the field to access
       */
-    override protected[this] def rawField(name: String): Try[Any]
+    override protected def rawField(name: String): Try[Any]
       = Try(obj get name)
+
+    override protected def rawFieldOption(name: String): Option[Any]
+      = Option(obj opt name)
 
     /**
       * @return the names of the fields in this object
