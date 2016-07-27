@@ -21,15 +21,8 @@ extends JsObject {
     * @param value the value to set the field to
     */
   override protected[this] def setField(name: String, value: Any): Unit
-    = ???
-
-  /**
-    * Adds a field in this object with the given `name` and `value`.
-    *
-    * @param name  the name for the new field
-    * @param value the value for the new field
-    */
-  override protected[this] def addField(name: String, value: Any): Unit = ???
+    // TODO: handle cases where the Value is not a JSON-able thing
+    = obj.put(name, value)
 
   /**
     * Access a given field from this object
