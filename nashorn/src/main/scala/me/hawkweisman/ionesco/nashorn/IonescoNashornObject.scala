@@ -26,8 +26,8 @@ extends JsObject {
     *
     * @param name the name of the field to access
     */
-  override protected def rawField(name: String): Try[Any] = ???
-  override protected def rawFieldOption(name: String): Option[Any] = ???
+  override protected def rawField(name: String): Try[AnyRef] = ???
+  override protected def rawFieldOption(name: String): Option[AnyRef] = ???
 
   /**
     * @return the names of the fields in this object
@@ -37,9 +37,9 @@ extends JsObject {
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  override protected[this] def rawOption: Option[Any] = ???
+  override protected[this] def rawOption: Option[AnyRef] = ???
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
-  override protected[this] def rawTry: Try[Any] = ???
+  override protected[this] def rawTry: Try[AnyRef] = ???
 }
