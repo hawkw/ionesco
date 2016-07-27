@@ -19,6 +19,7 @@ extends Dynamic
   class Select(val name: String, protected val parent: Selectable)
   extends Selectable {
 
+
     /**
       * @return the names of the fields in this object
       */
@@ -28,27 +29,32 @@ extends Dynamic
     /**
       * @return the raw untyped ([[Any]]) optional value of this object
       */
-    override protected[this] def rawOption: Option[Any] = ???
+    override protected[this] def rawOption: Option[Any]
+      = parent.asOption[JsObject] flatMap { _ rawFieldOption name }
 
     /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
       */
     override protected[this] def rawTry: Try[Any]
-    = parent.as[JsObject] flatMap { _ rawField name }
+      = parent.as[JsObject] flatMap { _ rawField name }
 
     /**
       * Access a given field from this object
       *
       * @param name the name of the field to access
       */
-    override protected[this] def rawField(name: String): Try[Any]
+    override protected def rawField(name: String): Try[Any]
       = this.as[JsObject] flatMap { _ rawField name }
+
+    override protected def rawFieldOption(name: String): Option[Any]
+      = parent.asOption[JsObject] flatMap { _ rawFieldOption name }
   }
 
   /**
     * Access a given field from this object
     * @param name the name of the field to access
     */
-  protected[this] def rawField(name: String): Try[Any]
+  protected def rawField(name: String): Try[Any]
+  protected def rawFieldOption(name: String): Option[Any]
 
   @inline def contains(name: String): Boolean = names contains name
 
