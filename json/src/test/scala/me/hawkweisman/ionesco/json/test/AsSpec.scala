@@ -1,5 +1,6 @@
 package me.hawkweisman.ionesco
 package json
+package test
 
 import org.json.JSONObject
 import org.scalatest.{Matchers, OptionValues, TryValues, WordSpec}

@@ -1,8 +1,6 @@
 package me.hawkweisman.ionesco
 
-import json._
-import org.json.JSONObject
-
+import scala.language.postfixOps
 import scala.reflect.{classTag, ClassTag}
 import scala.util.{Failure, Success, Try}
 
@@ -36,20 +34,36 @@ trait Resolvable {
     */
   @inline final def as[T: JsValue#Element : ClassTag]: Try[T]
     = rawTry flatMap {
-      case it: JSONObject if classTag[T] == classTag[JsObject] =>
-        Success(IonescoJsonObject(it).asInstanceOf[T])
+      case it  if classTag[T] == classTag[JsObject] =>
+        Resolvable.jsonObjectToIonesco(it)
       case it: T => Success(it)
         // TODO: this exception needs to have a new type
       case it => Failure(new Exception(
-        s"Could not represent $it as a(n) ${implicitly[ClassTag[T]]}"))
+        s"Could not represent $it as a(n) ${classTag[T]}"))
     }
 
   @inline final def asOption[T: JsValue#Element : ClassTag]: Option[T]
     = rawOption flatMap {
-      case it: JSONObject if classTag[T] == classTag[JsObject] =>
-        Some(IonescoJsonObject(it).asInstanceOf[T])
+      case it if classTag[T] == classTag[JsObject] =>
+        Resolvable.jsonObjectToIonesco(it) toOption
       case it: T => Some(it)
       case _ => None
     }
 
+}
+
+object Resolvable {
+  private[this] lazy val jsonObjectClass: Try[Class[_]]
+  = Try(Class.forName("org.json.JSONObject"))
+
+  private[this] lazy val ionescoJsonObjectClass: Try[Class[_]]
+  = Try(Class.forName("me.hawkweisman.ionesco.json.IonescoJsonObject"))
+
+  private def jsonObjectToIonesco[B](obj: Any): Try[B]
+    = for {
+        jsonObj <- jsonObjectClass
+        ionescoObj <- ionescoJsonObjectClass
+        ionescoObjConstructor <- Try(ionescoObj.getConstructor(jsonObj))
+        newObj <- Try(ionescoObjConstructor.newInstance(obj.asInstanceOf[Object]))
+      } yield newObj.asInstanceOf[B]
 }
