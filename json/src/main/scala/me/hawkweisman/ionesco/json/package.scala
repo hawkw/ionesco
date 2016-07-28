@@ -1,6 +1,6 @@
 package me.hawkweisman.ionesco
 
-import org.json.JSONObject
+import org.json.{JSONArray, JSONObject}
 
 import scala.language.implicitConversions
 
@@ -12,5 +12,8 @@ package object json {
 
   implicit def wrapJsonObject(obj: JSONObject): IonescoJsonObject
     = new IonescoJsonObject(obj)
+
+  implicit def wrapJsonArray(array: JSONArray): IonescoJsonArray
+    = new IonescoJsonArray(array)
 
 }
