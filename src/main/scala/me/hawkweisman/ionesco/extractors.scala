@@ -18,15 +18,16 @@ object extractors {
   object JsBool extends JsExtractor[Boolean]
   object JsString extends JsExtractor[String]
 
-//  object JsonArray extends Json[JSONArray] {
-//    @inline def unapplySeq(query: Queryable): Option[IndexedSeq[Index]]
-//    = query.asOption[JSONArray] map { IndexableJsonArray }
-//  }
+  object JsArray extends JsExtractor[JsArray] {
+    @inline def unapplySeq(query: Resolvable): Option[IndexedSeq[Resolvable]]
+    = query.asOption[JsArray]
+  }
 
   object JsObject extends JsExtractor[JsObject] {
     @inline def unapplySeq(query: Resolvable): Option[Seq[(String, Resolvable)]]
 //      = query.asOption[JsObject] map { _ toSeq }
       = ???
   }
+
 
 }
