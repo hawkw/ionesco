@@ -41,12 +41,14 @@ extends Dynamic
       *
       * @param name the name of the field to access
       */
-    @inline override protected def rawField(name: String): Try[AnyRef]
+    @inline
+    override protected[ionesco] def rawField(name: String): Try[AnyRef]
     = for { obj <- this.as[JsObject]
             raw <- obj rawField name }
       yield raw
 
-    @inline override protected def rawFieldOption(name: String): Option[AnyRef]
+    @inline
+    override protected[ionesco] def rawFieldOption(name: String): Option[AnyRef]
       = for { obj <- this.asOption[JsObject]
               raw <- obj rawFieldOption name }
         yield raw
@@ -56,8 +58,8 @@ extends Dynamic
     * Access a given field from this object
     * @param name the name of the field to access
     */
-  protected def rawField(name: String): Try[AnyRef]
-  protected def rawFieldOption(name: String): Option[AnyRef]
+  protected[ionesco] def rawField(name: String): Try[AnyRef]
+  protected[ionesco] def rawFieldOption(name: String): Option[AnyRef]
 
   @inline def contains(name: String): Boolean = names contains name
 

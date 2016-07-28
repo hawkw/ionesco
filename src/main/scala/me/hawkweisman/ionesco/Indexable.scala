@@ -21,17 +21,16 @@ trait Indexable {
       *
       * @param name the name of the field to access
       */
-    @inline
-    override protected def rawField(name: String): Try[AnyRef]
-      = for { obj <- this.as[JsObject]
-              raw <- obj rawField name }
-        yield raw
+    @inline override protected[ionesco] def rawField(name: String): Try[AnyRef]
+    = for { obj: JsObject <- this.as[JsObject]
+            raw <- obj rawField name }
+      yield raw
 
     @inline
-    override protected def rawFieldOption(name: String): Option[AnyRef]
-      = for { obj <- this.asOption[JsObject]
-              raw <- obj rawFieldOption name }
-        yield raw
+    override protected[ionesco] def rawFieldOption(name: String): Option[AnyRef]
+    = for { obj: JsObject <- this.asOption[JsObject]
+            raw <- obj rawFieldOption name }
+      yield raw
 
     /**
       * @return the names of the fields in this object
