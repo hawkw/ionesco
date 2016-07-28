@@ -14,30 +14,30 @@ trait Indexable {
   protected def rawIndexOption(idx: Int): Option[AnyRef]
 
   class Index(val idx: Int, protected val parent: Indexable)
-  extends Resolvable {
-//  extends Selectable {
-//    /**
-//      * Access a given field from this object
-//      *
-//      * @param name the name of the field to access
-//      */
-//    @inline
-//    override protected def rawField(name: String): Try[AnyRef]
-//      = for { obj <- this.as[JsObject]
-//              raw <- obj rawField name }
-//        yield raw
-//
-//    @inline
-//    override protected def rawFieldOption(name: String): Option[AnyRef]
-//      = for { obj <- this.asOption[JsObject]
-//              raw <- obj rawFieldOption name }
-//        yield raw
-//
-//    /**
-//      * @return the names of the fields in this object
-//      */
-//    override def names: Set[String]
-//      = this.as[JsObject] map { _.names } getOrElse Set()
+//  extends Resolvable {
+  extends Selectable {
+    /**
+      * Access a given field from this object
+      *
+      * @param name the name of the field to access
+      */
+    @inline
+    override protected def rawField(name: String): Try[AnyRef]
+      = for { obj <- this.as[JsObject]
+              raw <- obj rawField name }
+        yield raw
+
+    @inline
+    override protected def rawFieldOption(name: String): Option[AnyRef]
+      = for { obj <- this.asOption[JsObject]
+              raw <- obj rawFieldOption name }
+        yield raw
+
+    /**
+      * @return the names of the fields in this object
+      */
+    override def names: Set[String]
+      = this.as[JsObject] map { _.names } getOrElse Set()
 
     /**
       * @return the raw untyped ([[Any]]) optional value of this object
