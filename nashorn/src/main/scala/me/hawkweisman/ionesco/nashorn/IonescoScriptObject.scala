@@ -19,15 +19,19 @@ extends JsObject {
     * @param name  the name of the field to set
     * @param value the value to set the field to
     */
-  override protected[this] def setField(name: String, value: Any): Unit = ???
+  override protected[this] def setField(name: String, value: AnyRef): Unit
+    = obj.setMember(name, value)
 
   /**
     * Access a given field from this object
     *
     * @param name the name of the field to access
     */
-  override protected def rawField(name: String): Try[AnyRef] = ???
-  override protected def rawFieldOption(name: String): Option[AnyRef] = ???
+  override protected def rawField(name: String): Try[AnyRef]
+    = Try(obj getMember name)
+
+  override protected def rawFieldOption(name: String): Option[AnyRef]
+    = Option(obj getMember name)
 
   /**
     * @return the names of the fields in this object
@@ -37,9 +41,11 @@ extends JsObject {
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  override protected[this] def rawOption: Option[AnyRef] = ???
+  override protected[this] def rawOption: Option[AnyRef]
+    = Some(obj)
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
-  override protected[this] def rawTry: Try[AnyRef] = ???
+  override protected[this] def rawTry: Try[AnyRef]
+    = Try(obj)
 }
