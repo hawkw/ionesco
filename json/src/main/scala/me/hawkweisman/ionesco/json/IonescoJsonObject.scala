@@ -44,7 +44,8 @@ extends JsObject {
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  override protected[this] def rawOption: Option[JSONObject] = Some(obj)
+  override protected[this] def rawOption: Option[JSONObject]
+    = Option(obj)
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
