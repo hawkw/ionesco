@@ -19,6 +19,7 @@ extends JsObject {
     * @param name  the name of the field to set
     * @param value the value to set the field to
     */
+  @inline
   override protected[this] def setField(name: String, value: AnyRef): Unit
     = obj.setMember(name, value)
 
@@ -27,25 +28,28 @@ extends JsObject {
     *
     * @param name the name of the field to access
     */
+  @inline
   override protected def rawField(name: String): Try[AnyRef]
     = Try(obj getMember name)
 
+  @inline
   override protected def rawFieldOption(name: String): Option[AnyRef]
     = Option(obj getMember name)
 
   /**
     * @return the names of the fields in this object
     */
+  @inline
   override def names: Set[String] = obj.keySet.iterator.asScala.toSet
 
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  override protected[this] def rawOption: Option[AnyRef]
+  override protected[this] lazy val rawOption: Option[AnyRef]
     = Some(obj)
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
-  override protected[this] def rawTry: Try[AnyRef]
+  override protected[this] lazy val rawTry: Try[AnyRef]
     = Try(obj)
 }

@@ -21,6 +21,7 @@ extends JsObject {
     * @param name  the name of the field to set
     * @param value the value to set the field to
     */
+  @inline
   override protected[this] def setField(name: String, value: AnyRef): Unit
     // TODO: handle cases where the Value is not a JSON-able thing
     = obj.put(name, value)
@@ -30,24 +31,24 @@ extends JsObject {
     *
     * @param name the name of the field to access
     */
-  override def rawField(name: String): Try[AnyRef]
+  @inline override def rawField(name: String): Try[AnyRef]
   = Try(obj get name)
 
-  override def rawFieldOption(name: String): Option[AnyRef]
+  @inline override def rawFieldOption(name: String): Option[AnyRef]
   = Option(obj opt name)
 
   /**
     * @return the names of the fields in this object
     */
-  override def names: Set[String] = obj.keys.asScala.toSet
+  @inline override def names: Set[String] = obj.keys.asScala.toSet
 
   /**
     * @return the raw untyped ([[Any]]) optional value of this object
     */
-  override protected[this] def rawOption: Option[JSONObject]
+  override protected[this] lazy val rawOption: Option[JSONObject]
     = Option(obj)
 
   /** @return the raw untyped ([[Any]]) value of this object, as a [[Try]]
     */
-  override protected[this] def rawTry: Try[JSONObject] = Success(obj)
+  override protected[this] lazy val rawTry: Try[JSONObject] = Success(obj)
 }
