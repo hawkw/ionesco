@@ -1,7 +1,7 @@
-package me.hawkweisman.ionesco.nashorn
+package me.hawkweisman.ionesco
+package nashorn
 
 import jdk.nashorn.api.scripting.{JSObject => NashornJsObject}
-import me.hawkweisman.ionesco.JsObject
 import scala.collection.JavaConverters._
 
 import scala.util.Try

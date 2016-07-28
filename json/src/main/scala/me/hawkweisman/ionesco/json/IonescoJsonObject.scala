@@ -4,7 +4,6 @@ package json
 import org.json.JSONObject
 
 import scala.collection.JavaConverters._
-import scala.reflect.ClassTag
 import scala.util.{Success, Try}
 
 /**

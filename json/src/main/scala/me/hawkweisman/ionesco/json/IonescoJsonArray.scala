@@ -1,6 +1,6 @@
-package me.hawkweisman.ionesco.json
+package me.hawkweisman.ionesco
+package json
 
-import me.hawkweisman.ionesco.JsArray
 import org.json.JSONArray
 
 import scala.language.postfixOps
