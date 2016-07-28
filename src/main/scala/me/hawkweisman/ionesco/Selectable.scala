@@ -1,7 +1,6 @@
 package me.hawkweisman.ionesco
 
 import scala.language.dynamics
-import scala.reflect.ClassTag
 import scala.util.Try
 
 /** Trait for JavaScript objects with fields that can be selected.
