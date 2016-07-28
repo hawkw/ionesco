@@ -26,9 +26,9 @@ extends Selectable {
     * @param name   the name of the field to set
     * @param value  the value to set the field to
     */
-  protected[this] def setField(name: String, value: Any): Unit
+  protected[this] def setField(name: String, value: AnyRef): Unit
 
-  @inline def updateDynamic(name: String)(value: Any): Unit
+  @inline def updateDynamic(name: String)(value: AnyRef): Unit
     = setField(name, value)
 
 
