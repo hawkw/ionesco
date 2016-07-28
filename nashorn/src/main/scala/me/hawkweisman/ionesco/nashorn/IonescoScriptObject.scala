@@ -29,11 +29,11 @@ extends JsObject {
     * @param name the name of the field to access
     */
   @inline
-  override protected def rawField(name: String): Try[AnyRef]
+  override protected[ionesco] def rawField(name: String): Try[AnyRef]
     = Try(obj getMember name)
 
   @inline
-  override protected def rawFieldOption(name: String): Option[AnyRef]
+  override protected[ionesco] def rawFieldOption(name: String): Option[AnyRef]
     = Option(obj getMember name)
 
   /**
