@@ -60,7 +60,7 @@ object Resolvable {
     = Try(Class.forName("org.json.JSONObject")) toOption
 
   private[this] lazy val nashornObjectClass: Option[Class[_]]
-    = Try(Class.forName("jdk.nashorn.api.scripting.ScriptObjectMirror"))
+    = Try(Class.forName("jdk.nashorn.api.scripting.JSObject"))
           .toOption
 
   /**

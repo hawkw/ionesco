@@ -1,6 +1,6 @@
 package me.hawkweisman.ionesco.nashorn
 
-import jdk.nashorn.api.scripting.ScriptObjectMirror
+import jdk.nashorn.api.scripting.{JSObject => NashornJsObject}
 import me.hawkweisman.ionesco.JsObject
 import scala.collection.JavaConverters._
 
@@ -9,7 +9,7 @@ import scala.util.Try
 /**
   * Created by Eliza on 7/27/16.
   */
-class IonescoScriptObject(val obj: ScriptObjectMirror)
+class IonescoScriptObject(val obj: NashornJsObject)
 extends JsObject {
   /**
     * Set a field in this object equal to the given value.
