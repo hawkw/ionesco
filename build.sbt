@@ -1,3 +1,4 @@
+import sbt.Keys._
 
 //--- common settings across all projects -------------------------------------
 lazy val commonSettings = Seq(
@@ -31,8 +32,8 @@ lazy val core = (project in file("."))
   .settings(versionEyeSettings: _*)
 
 lazy val json = (project in file("json"))
-  .enablePlugins(VersionEyePlugin)
   .dependsOn(core)
+  .enablePlugins(VersionEyePlugin)
   .settings(commonSettings: _*)
   .settings(versionEyeSettings: _*)
   .settings(libraryDependencies += "org.json" % "json" % version_Json)
