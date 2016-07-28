@@ -7,7 +7,7 @@ import scala.util.Try
   */
 trait Indexable {
 
-  def apply(i: Int): Index
+  @inline def apply(i: Int): Index
     = new Index(i, this)
 
   protected def rawIndex(idx: Int): Try[AnyRef]
