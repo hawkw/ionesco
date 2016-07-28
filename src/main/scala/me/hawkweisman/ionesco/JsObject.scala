@@ -20,7 +20,6 @@ extends Settable
 //  override def -=(key: String) = ???
 //
   override def foreach[U](f: ((String, Selectable#Select)) => U): Unit
-    = for { name <- names
-            select: Select <- selectDynamic(name) }
-      f((name, select))
+    = for { name <- names }
+      f((name, new Select(name, this)))
 }
