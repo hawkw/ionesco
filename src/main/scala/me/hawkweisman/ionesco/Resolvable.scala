@@ -34,7 +34,8 @@ trait Resolvable {
     */
   @inline final def as[T: JsValue#Element : ClassTag]: Try[T]
     = rawTry flatMap {
-      case it if classTag[T] == classTag[JsObject] =>
+      case it if classTag[T] == classTag[JsObject] ||
+                 classTag[T] == classTag[JsArray] =>
         Resolvable jsObjFor it
       case it: T => Success(it)
         // TODO: this exception needs to have a new type
@@ -44,7 +45,8 @@ trait Resolvable {
 
   @inline final def asOption[T: JsValue#Element : ClassTag]: Option[T]
     = rawOption flatMap {
-      case it if classTag[T] == classTag[JsObject] =>
+    case it if classTag[T] == classTag[JsObject] ||
+               classTag[T] == classTag[JsArray] =>
         Resolvable jsObjFor it toOption
       case it: T => Some(it)
       case _ => None
@@ -58,6 +60,11 @@ object Resolvable {
     */
   private[this] lazy val jsonObjectClass: Option[Class[_]]
     = Try(Class.forName("org.json.JSONObject")) toOption
+  /**
+    * An attempt to load the `JSONArray` class from `org.json`.
+    */
+  private[this] lazy val jsonArrayClass: Option[Class[_]]
+    = Try(Class.forName("org.json.JSONArray")) toOption
 
   private[this] lazy val nashornObjectClass: Option[Class[_]]
     = Try(Class.forName("jdk.nashorn.api.scripting.JSObject"))
@@ -68,6 +75,12 @@ object Resolvable {
     */
   private[this] lazy val ionescoJsonObjectClass: Try[Class[_]]
     = Try(Class.forName("me.hawkweisman.ionesco.json.IonescoJsonObject"))
+
+  /**
+    * An attempt to load the `IonescoJSONObject` class from `ionesco.json`.
+    */
+  private[this] lazy val ionescoJsonArrayClass: Try[Class[_]]
+  = Try(Class.forName("me.hawkweisman.ionesco.json.IonescoJsonArray"))
 
   /**
     * An attempt to load the `IonescoNashornObject` class from `ionesco
@@ -84,6 +97,7 @@ object Resolvable {
   @inline private[this] def ionescoClassFor(obj: AnyRef): Try[Class[_]]
     = obj.getClass match {
         case c if jsonObjectClass contains c => ionescoJsonObjectClass
+        case c if jsonArrayClass contains c => ionescoJsonArrayClass
         case c if nashornObjectClass contains c => ionescoNashornObjectClass
         case c =>
           Failure(new Exception(
