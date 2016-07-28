@@ -45,8 +45,8 @@ trait Resolvable {
 
   @inline final def asOption[T: JsValue#Element : ClassTag]: Option[T]
     = rawOption flatMap {
-    case it if classTag[T] == classTag[JsObject] ||
-               classTag[T] == classTag[JsArray] =>
+      case it if classTag[T] == classTag[JsObject] ||
+                 classTag[T] == classTag[JsArray] =>
         Resolvable jsObjFor it toOption
       case it: T => Some(it)
       case _ => None

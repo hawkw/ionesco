@@ -5,4 +5,6 @@ package me.hawkweisman.ionesco
   */
 trait JsArray
 extends Indexable
-  with IndexedSeq[Resolvable]
+  with IndexedSeq[Resolvable] {
+
+}
