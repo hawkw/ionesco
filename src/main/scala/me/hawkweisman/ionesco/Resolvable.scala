@@ -74,7 +74,7 @@ object Resolvable {
     * .nashorn`.
     */
   private[this] lazy val ionescoNashornObjectClass: Try[Class[_]]
-    = Try(Class.forName("me.hawkweisman.ionesco.nashorn.IonescoNashornObject"))
+    = Try(Class.forName("me.hawkweisman.ionesco.nashorn.IonescoScriptObject"))
 
   /**
     * Returns the Ionesco class for an object of the given `Class`

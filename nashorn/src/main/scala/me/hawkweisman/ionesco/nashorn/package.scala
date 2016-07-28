@@ -9,6 +9,6 @@ import scala.language.implicitConversions
   */
 package object nashorn {
 
-  implicit def wrapScriptObject(obj: ScriptObjectMirror): IonescoNashornObject
-    = new IonescoNashornObject(obj)
+  implicit def wrapScriptObject(obj: ScriptObjectMirror): IonescoScriptObject
+    = new IonescoScriptObject(obj)
 }

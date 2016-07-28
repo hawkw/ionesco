@@ -9,7 +9,7 @@ import scala.util.Try
 /**
   * Created by Eliza on 7/27/16.
   */
-class IonescoNashornObject(val obj: ScriptObjectMirror)
+class IonescoScriptObject(val obj: ScriptObjectMirror)
 extends JsObject {
   /**
     * Set a field in this object equal to the given value.
